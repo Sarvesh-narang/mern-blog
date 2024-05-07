@@ -3,7 +3,7 @@
 function SignUp() {
     return (
       <div>
-        Do sign up
+        Do sign up okay
       </div>
     );
   }
