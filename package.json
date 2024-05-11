@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon API/index.js",
-    "start": "node API/index.js"
+    "start": "nodemon API/index.js"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +15,7 @@
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.3.4",
     "nodemon": "^3.1.0"
   }

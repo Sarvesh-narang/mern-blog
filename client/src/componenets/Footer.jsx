@@ -64,7 +64,7 @@ function FooterCom() {
                     <Footer.Link
                         href='#'
                     >
-                        Terms  &amp; condition
+                        Terms  &amp; condition 
                     </Footer.Link>
                 </Footer.LinkGroup>
             </div>
