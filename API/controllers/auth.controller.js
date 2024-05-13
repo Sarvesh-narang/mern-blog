@@ -79,16 +79,16 @@ export const google = async (req, res, next) => {
             const generatedPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
             const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
             const newUser = new User ({
-                username: name.toLowerCase().split(' ').join('') + Math.random().toString(9).slice(-4),
+                username: username.toLowerCase().split(' ').join('') + Math.random().toString(9).slice(-4),
                 // Sarvesh Narang => sarveshnarang{random_number}
                 email,
                 password: hashedPassword,
-                profilePictures: googlePhotoUrl,
+                profilePicture: googlePhotoUrl,
 
             })
             await newUser.save();
             const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
-            const {pasword, ...rest} = newUser._doc;
+            const { password, ...rest} = newUser._doc;
             res
                 .status(200)
                 .cookie("access_token", token, {
