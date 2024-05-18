@@ -33,7 +33,7 @@ function OAuth() {
                 navigate('/');
             }
         } catch (error) {
-            console.log(error);
+            console.error('Error during sign in', error)
         }
     }
 

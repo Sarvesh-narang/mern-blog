@@ -27,9 +27,7 @@ function DashProfile() {
     }
   }, [imageFile]);
 
-  const uploadImage = async () => {
-    console.log('uploading image...');
-  
+  const uploadImage = async () => {  
    setImageFileUploadError(null) 
    const storage = getStorage(app);
    const fileName = new Date().getTime() + imageFile.name;
