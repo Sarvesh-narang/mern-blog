@@ -11,7 +11,8 @@ function DashProfile() {
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
-  const [imageFileUploadError, setImageFileUploadError] = useState(null)
+  const [imageFileUploadError, setImageFileUploadError] = useState(null);
+  const [formData, setFormData] = useState({});
   const filePickerRef = useRef();
   const handleImageChange = (e) => {
     const file = e.target.files[0]
@@ -50,14 +51,27 @@ function DashProfile() {
     () => {
       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
         setImageFileUrl(downloadURL);
-      })
+        setFormData({...formData, profilePicture: downloadURL});
+      });
     }
    )
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value});
+  };
+
+  const handleChange = async (e) => {
+    e.preventDefault();
+    if (Object.keys(formData).length === 0) {
+      return;
+    }
+    
   };
   return (
     <div className='max-w-lg mx-auto p-3 w-full'>
       <h1 className='my-7 text-center font-semibold text-3xl'>Profile</h1>
-      <form className='flex flex-col gap-4'>
+      <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
           <input type='file'
             accept='image/*'
             onChange={handleImageChange}
@@ -96,9 +110,26 @@ function DashProfile() {
           </div>
           {imageFileUploadError && <Alert color='failure'>{imageFileUploadError}</Alert>}
 
-          <TextInput type='text' id='username' placeholder='username' defaultValue={currentUser.username}/>
-          <TextInput type='email' id='email' placeholder='email' defaultValue={currentUser.email}/>
-          <TextInput type='password' id='password' placeholder='password'/>
+          <TextInput type='text' 
+          id='username' 
+          placeholder='username' 
+          defaultValue={currentUser.username} 
+          onChange={handleChange}
+
+          />
+          <TextInput 
+          type='email' 
+          id='email' 
+          placeholder='email' 
+          defaultValue={currentUser.email}
+          onChange={handleChange}  
+          />
+          <TextInput 
+          type='password' 
+          id='password' 
+          placeholder='password'
+
+          />
           <Button 
           type='submit'
           gradientDuoTone='purpleToBlue'
