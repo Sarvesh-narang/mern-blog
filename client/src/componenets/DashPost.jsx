@@ -4,8 +4,9 @@ import { Table } from 'flowbite-react'
 import {Link} from 'react-router-dom'
 
 export default function DashPost() {
-  const { currentUser } = useSelector((state) => state.user)
+  const { currentUser } = useSelector((state) => state.user);
   const [userPosts, setUserPosts] = useState([]);
+  const [showMore, setShowMOre] = useState(true);
   console.log(userPosts)
   useEffect(() => {
     const fetchPosts = async() => {
@@ -14,6 +15,9 @@ export default function DashPost() {
         const data = await res.json()
         if (res.ok) {
           setUserPosts(data.posts)
+          if (data.posts.length < 9) {
+            setShowMOre(false);
+          }
         }
         console.log(data)
       } catch (error) {
@@ -23,7 +27,24 @@ export default function DashPost() {
     if (currentUser.isAdmin) {
       fetchPosts();
     } 
-  }, [currentUser._id])
+  }, [currentUser._id]);
+
+  const handleShowMore = async () => {
+    const startIndex = userPosts.length;
+    try {
+      const res = await fetch(`/api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`);
+      const data = await res.json();
+
+      if (res.ok) {
+        setUserPosts((prev) => [...prev, ...data.posts]);
+        if (data.posts.length < 9) {
+          setShowMOre(false);
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <div className="table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700">
     {currentUser.isAdmin && userPosts.length > 0 ? (
@@ -67,6 +88,11 @@ export default function DashPost() {
             </Table.Body>
           })}
         </Table>
+        {
+          showMore && (
+            <button onClick={handleShowMore} className="w-full text-teal-500 self-center text-sm py-7">Show more</button>
+          )
+        }
       </>
     ) : (
       <p> You have no posts yet!</p>
