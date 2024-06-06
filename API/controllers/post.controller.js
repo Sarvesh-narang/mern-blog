@@ -1,5 +1,5 @@
 import Post from "../models/post.model.js";
-import { errorHandler } from "../utils/error.js"
+import { errorHandler } from "../utils/error.js";
 
 export const create = async(req, res, next) => {
     if (!req.user.isAdmin) {
@@ -69,20 +69,18 @@ export const getposts = async (req, res, next) => {
 }
 
 
-export default deletepost = async (res, req, next) => {
+export const deletepost = async (res, req, next) => {
     if (!req.user.isAdmin || req.user.id !== req.params.userId) {
         return next(errorHandler(402, "you are not allowed to delete this post"))
     }
     try {
-        await Post.findByIdAndDelete(req.params.postId);
+        await Post.findByIdAndDelete(req.params.postId);    
         res.status(200).json('The post has been deleted');
     } catch (error) {
         next(error)
     }
 }
 
-import Post from "../models/post.model.js";
-import { errorHandler } from "../utils/error.js";
 
 export const updatepost = async (req, res, next) => {
     if (!req.user.isAdmin && req.user.id !== req.params.userId) {
