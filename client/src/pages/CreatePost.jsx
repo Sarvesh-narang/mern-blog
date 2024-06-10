@@ -22,7 +22,7 @@ export default function CreatePost() {
 
   const navigate = useNavigate();
 
-  const handleUpdloadImage = async () => {
+  const handleUploadImage = async () => {
     try {
       if (!file) {
         setImageUploadError('Please select an image');
@@ -33,29 +33,24 @@ export default function CreatePost() {
       const fileName = new Date().getTime() + '-' + file.name;
       const storageRef = ref(storage, fileName);
       const uploadTask = uploadBytesResumable(storageRef, file);
-  
-      // Get download URL and set form data when upload completes
-      uploadTask.on('state_changed', 
+      uploadTask.on(
+        'state_changed',
         (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           setImageUploadProgress(progress.toFixed(0));
-        }, 
+        },
         (error) => {
           setImageUploadError('Image upload failed');
           setImageUploadProgress(null);
-          console.log(error);
+          console.log(error)
         },
-        async () => {
-          try {
-            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             setImageUploadProgress(null);
             setImageUploadError(null);
             setFormData({ ...formData, image: downloadURL });
-          } catch (error) {
-            setImageUploadError('Failed to get download URL');
-            setImageUploadProgress(null);
-            console.log(error);
-          }
+          });
         }
       );
     } catch (error) {
@@ -64,7 +59,6 @@ export default function CreatePost() {
       console.log(error);
     }
   };
-  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -80,7 +74,7 @@ export default function CreatePost() {
         setPublishError(data.message);
         return;
       }
-
+      
       if (res.ok) {
         setPublishError(null);
         navigate(`/post/${data.slug}`);
@@ -113,6 +107,9 @@ export default function CreatePost() {
             <option value='javascript'>JavaScript</option>
             <option value='reactjs'>React.js</option>
             <option value='nextjs'>Next.js</option>
+            <option value='c++'>c++</option>
+            <option value='python'>python</option>
+            <option value='php'>php</option>
           </Select>
         </div>
         <div className='flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3'>
@@ -126,7 +123,7 @@ export default function CreatePost() {
             gradientDuoTone='purpleToBlue'
             size='sm'
             outline
-            onClick={handleUpdloadImage}
+            onClick={handleUploadImage}
             disabled={imageUploadProgress}
           >
             {imageUploadProgress ? (
